@@ -151,6 +151,20 @@ app.post('/api/auth/signup', authLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Password must not exceed 72 characters.' });
   }
 
+  // --- Password Complexity: must contain uppercase, lowercase, digit, and special character ---
+  if (!/[A-Z]/.test(password)) {
+    return res.status(400).json({ error: 'Password must contain at least one uppercase letter.' });
+  }
+  if (!/[a-z]/.test(password)) {
+    return res.status(400).json({ error: 'Password must contain at least one lowercase letter.' });
+  }
+  if (!/[0-9]/.test(password)) {
+    return res.status(400).json({ error: 'Password must contain at least one number.' });
+  }
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+    return res.status(400).json({ error: 'Password must contain at least one special character (!@#$%^&* etc.).' });
+  }
+
   const userExists = users.find(u => u.username.toLowerCase() === trimmedUsername.toLowerCase() || u.email.toLowerCase() === trimmedEmail);
   if (userExists) {
     return res.status(409).json({ error: 'Username or email already exists.' });

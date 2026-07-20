@@ -10,7 +10,9 @@ import {
   User, 
   Download, 
   AlertTriangle,
-  FolderOpen
+  FolderOpen,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:5000/api';
@@ -48,6 +50,7 @@ export default function App() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [authSuccess, setAuthSuccess] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // File Upload & List State
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -439,14 +442,50 @@ export default function App() {
 
                 <div className="form-group">
                   <label className="form-label">Password</label>
-                  <input 
-                    type="password" 
-                    className="form-input" 
-                    placeholder="Enter password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="password-input-wrapper">
+                    <input 
+                      type={showPassword ? 'text' : 'password'} 
+                      className="form-input" 
+                      placeholder="Enter password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="password-toggle" 
+                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex={-1}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+
+                  {activeTab === 'signup' && password.length > 0 && (
+                    <div className="password-strength">
+                      <div className={`strength-rule ${password.length >= 6 ? 'pass' : ''}`}>
+                        {password.length >= 6 ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                        <span>At least 6 characters</span>
+                      </div>
+                      <div className={`strength-rule ${/[A-Z]/.test(password) ? 'pass' : ''}`}>
+                        {/[A-Z]/.test(password) ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                        <span>Uppercase letter (A-Z)</span>
+                      </div>
+                      <div className={`strength-rule ${/[a-z]/.test(password) ? 'pass' : ''}`}>
+                        {/[a-z]/.test(password) ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                        <span>Lowercase letter (a-z)</span>
+                      </div>
+                      <div className={`strength-rule ${/[0-9]/.test(password) ? 'pass' : ''}`}>
+                        {/[0-9]/.test(password) ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                        <span>Number (0-9)</span>
+                      </div>
+                      <div className={`strength-rule ${/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? 'pass' : ''}`}>
+                        {/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                        <span>Special character (!@#$...)</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className={`collapsible-checkbox ${activeTab === 'signup' && !adminExists ? 'show' : ''}`}>
