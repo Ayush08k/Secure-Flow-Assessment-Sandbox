@@ -14,8 +14,33 @@ A **production-grade, security-hardened** full-stack web application built to de
 
 ---
 
+## ⚡ Quick Start: How to Run
+
+Get the application running locally in less than a minute:
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Start the Application**:
+   Open **two terminal windows** (one for the backend and one for the frontend):
+   * **Terminal 1 (Backend API)**:
+     ```bash
+     npm run server
+     ```
+     *(Runs on `http://localhost:5000`)*
+   * **Terminal 2 (Frontend Dev)**:
+     ```bash
+     npm run dev
+     ```
+     *(Runs on `http://localhost:5173`)*
+
+---
+
 ## 📋 Table of Contents
 
+- [⚡ Quick Start](#-quick-start-how-to-run)
 - [How It Works](#-how-it-works)
 - [Architecture](#-architecture)
 - [Tools & Tech Stack](#-tools--tech-stack)
