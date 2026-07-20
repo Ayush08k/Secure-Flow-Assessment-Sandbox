@@ -270,7 +270,7 @@ npm run build
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `5000` | Backend API server port |
-| `JWT_SECRET` | Hardcoded fallback (dev only) | **Must** be set in production. Minimum 32 random characters recommended. |
+| `JWT_SECRET` | Auto-generated per session | Set a persistent secret in production. Minimum 32 random characters recommended. |
 
 ```bash
 # Example: Set via command line

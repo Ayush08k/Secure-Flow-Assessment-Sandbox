@@ -15,10 +15,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security: Read JWT secret from environment variable, fall back for dev only
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-assessment-key-12345';
+// Security: Read JWT secret from environment. In dev mode, auto-generates a random one per session.
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
 if (!process.env.JWT_SECRET) {
-  console.warn('[SECURITY WARNING] JWT_SECRET not set in environment. Using hardcoded fallback — NOT safe for production.');
+  console.warn('[SECURITY] No JWT_SECRET in env — using auto-generated ephemeral secret (tokens invalidate on restart).');
 }
 
 // Ensure uploads directory exists
