@@ -109,16 +109,21 @@ app.get('/api/auth/admin-exists', (req, res) => {
 
 // Signup
 app.post('/api/auth/signup', authLimiter, async (req, res) => {
-  const { username, password, email, role } = req.body;
+  const { username, password, confirmPassword, email, role } = req.body;
 
   // --- Input Presence Validation ---
-  if (!username || !password || !email) {
+  if (!username || !password || !confirmPassword || !email) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
   // --- Input Type Validation ---
-  if (typeof username !== 'string' || typeof password !== 'string' || typeof email !== 'string') {
+  if (typeof username !== 'string' || typeof password !== 'string' || typeof confirmPassword !== 'string' || typeof email !== 'string') {
     return res.status(400).json({ error: 'Invalid input types.' });
+  }
+
+  // --- Password Matching ---
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: 'Passwords do not match.' });
   }
 
   // --- Boundary Value: Username (3-30 chars, alphanumeric + underscore) ---

@@ -51,6 +51,8 @@ export default function App() {
   const [authSuccess, setAuthSuccess] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // File Upload & List State
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -129,6 +131,12 @@ export default function App() {
     e.preventDefault();
     setAuthError(null);
     setAuthSuccess(null);
+
+    if (password !== confirmPassword) {
+      setAuthError('Passwords do not match.');
+      return;
+    }
+
     setAuthLoading(true);
 
     try {
@@ -139,6 +147,7 @@ export default function App() {
           username,
           email,
           password,
+          confirmPassword,
           role: registerAsAdmin ? 'admin' : 'user'
         })
       });
@@ -148,6 +157,7 @@ export default function App() {
         setAuthSuccess('Registration successful! Please log in.');
         setActiveTab('login');
         setPassword('');
+        setConfirmPassword('');
         checkAdminExists();
       } else {
         setAuthError(data.error || 'Registration failed.');
@@ -484,6 +494,35 @@ export default function App() {
                         {/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password) ? <CheckCircle size={13} /> : <XCircle size={13} />}
                         <span>Special character (!@#$...)</span>
                       </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className={`collapsible-field ${activeTab === 'signup' ? 'show' : ''}`}>
+                  <label className="form-label">Retype Password</label>
+                  <div className="password-input-wrapper">
+                    <input 
+                      type={showConfirmPassword ? 'text' : 'password'} 
+                      className="form-input" 
+                      placeholder="Retype password" 
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required={activeTab === 'signup'}
+                    />
+                    <button 
+                      type="button" 
+                      className="password-toggle" 
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      tabIndex={-1}
+                      aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                  {activeTab === 'signup' && confirmPassword.length > 0 && (
+                    <div style={{ marginTop: '6px', fontSize: '12px', fontWeight: 500, color: password === confirmPassword ? 'var(--success)' : 'var(--danger)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {password === confirmPassword ? <CheckCircle size={13} /> : <XCircle size={13} />}
+                      <span>{password === confirmPassword ? 'Passwords match' : 'Passwords do not match'}</span>
                     </div>
                   )}
                 </div>
