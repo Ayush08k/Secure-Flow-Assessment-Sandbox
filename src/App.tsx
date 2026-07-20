@@ -527,16 +527,18 @@ export default function App() {
                   )}
                 </div>
 
-                <div className={`collapsible-checkbox ${activeTab === 'signup' && !adminExists ? 'show' : ''}`}>
-                  <label className="form-checkbox">
-                    <input 
-                      type="checkbox" 
-                      checked={registerAsAdmin}
-                      onChange={(e) => setRegisterAsAdmin(e.target.checked)}
-                    />
-                    <span>Register as Admin (To test file approval)</span>
-                  </label>
-                </div>
+                {activeTab === 'signup' && !adminExists && (
+                  <div className="collapsible-checkbox show">
+                    <label className="form-checkbox">
+                      <input 
+                        type="checkbox" 
+                        checked={registerAsAdmin}
+                        onChange={(e) => setRegisterAsAdmin(e.target.checked)}
+                      />
+                      <span>Register as Admin (To test file approval)</span>
+                    </label>
+                  </div>
+                )}
 
                 <button 
                   type="submit" 
